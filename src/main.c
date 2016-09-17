@@ -361,12 +361,10 @@ static void DumpSymbolTable( bool bTableSort )
     
 }
 
+static bool addedops = false;
 
 static int MainShadow(int ac, char **av, bool *pbTableSort )
-{
-    
-    
-    
+{    
     int nError = ERROR_NONE;
     bool bDoAllPasses = false;
     int nMaxPasses = 10;
@@ -379,7 +377,10 @@ static int MainShadow(int ac, char **av, bool *pbTableSort )
     unsigned long oldwhy = 0;
     int oldeval = 0;
     
-    addhashtable(Ops);
+    if (!addedops) {
+        addhashtable(Ops);
+        addedops = true;
+    }
     pass = 1;
 
     if (ac < 2)

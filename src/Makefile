@@ -45,14 +45,14 @@ GWARN= -ansi -std=c99 -pedantic -Wall \
 GDEBG= # -g # -fprofile-arcs -ftest-coverage -pg # -D_FORTIFY_SOURCE=2
 
 CFLAGS= $(GOPTI) $(GWARN) $(GDEBG)
-CC= gcc
+#CC= gcc
 
 OBJS= main.o ops.o globals.o exp.o symbols.o \
       mne6303.o mne6502.o mne68705.o mne6811.o mnef8.o
 SRCS= main.c ops.c globals.c exp.c symbols.c \
       mne6303.c mne6502.c mne68705.c mne6811.c mnef8.c
 
-ALL= dasm ftohex
+ALL= dasm ftohex dasm.js
 
 all: $(ALL)
 
@@ -82,3 +82,17 @@ alpha:
 	echo "See http://dasm-dillon.sf.net/ for details on DASM." >>README.ALPHA
 	tar zcvf dasm-alpha-`date +%F`.tar.gz README.ALPHA Makefile *.h *.c
 	rm -rf README.ALPHA
+
+# Emscripten target (see https://github.com/apiaryio/emscripten-docker)
+dasm.js:
+	cp -rp ../machines .
+	docker run --rm -v $(shell pwd):/src -t apiaryio/emcc emmake make dasm
+	docker run --rm -v $(shell pwd):/src -t apiaryio/emcc emcc -O1 \
+		-s ASM_JS=1 \
+		-s MODULARIZE=1 \
+		-s EXPORT_NAME=\"'DASM'\" \
+		-s 'EXTRA_EXPORTED_RUNTIME_METHODS=["FS"]' \
+		-s NO_EXIT_RUNTIME=1 *.o -o $@ \
+		--embed-file machines/atari2600/macro.h@macro.h \
+		--embed-file machines/atari2600/vcs.h@vcs.h
+
