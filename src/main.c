@@ -758,7 +758,7 @@ static void outlistfile(const char *comment)
     else
         ptr = "";
     
-    sprintf(buf1, "%7ld %c%s", pIncfile->lineno, c, sftos(Plab, Pflags & 7));
+    sprintf(buf1, "%7ld %20s %c%s", pIncfile->lineno, pIncfile->name, c, sftos(Plab, Pflags & 7));
     j = strlen(buf1);
     for (i = 0; i < Glen && i < 4; ++i, j += 3)
         sprintf(buf1+j, "%02x ", Gen[i]);
