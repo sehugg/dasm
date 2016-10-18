@@ -94,5 +94,6 @@ dasm.js:
 		-s 'EXTRA_EXPORTED_RUNTIME_METHODS=["FS"]' \
 		-s NO_EXIT_RUNTIME=1 *.o -o $@ \
 		--embed-file machines/atari2600/macro.h@macro.h \
+		--embed-file machines/atari2600/xmacro.h@xmacro.h \
 		--embed-file machines/atari2600/vcs.h@vcs.h
 
