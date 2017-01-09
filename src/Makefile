@@ -87,7 +87,7 @@ alpha:
 dasm.js:
 	cp -rp ../machines .
 	docker run --rm -v $(shell pwd):/src -t apiaryio/emcc emmake make dasm
-	docker run --rm -v $(shell pwd):/src -t apiaryio/emcc emcc -O1 \
+	docker run --rm -v $(shell pwd):/src -t apiaryio/emcc emcc -O2 --memory-init-file 0 \
 		-s ASM_JS=1 \
 		-s MODULARIZE=1 \
 		-s EXPORT_NAME=\"'DASM'\" \
